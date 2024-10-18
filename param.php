@@ -1,6 +1,6 @@
 <?php
 	$base = 'site';
-	$pass = 'mnVkrECAWnj96Yk4';
+	$pass = 'codetest';
 	$user = 'root';
 	$host = 'localhost';
 
