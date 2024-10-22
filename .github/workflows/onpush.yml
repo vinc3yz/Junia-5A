@@ -1,5 +1,6 @@
 name: Test and Build app
-
+env:
+  APP_NAME: webapp  # Set this to the name of your Azure 
 on:
   push:
     branches: [ develop ]  # Replace with your default branch
@@ -39,6 +40,25 @@ jobs:
 
       - name: Build and push image to Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USER }}/my-image:latest -f Dockerfile-nginxv1 .
-          docker push ${{ secrets.DOCKER_USER }}/my-image:latest
+          docker build -t ${{ secrets.DOCKER_USER }}/${{ env.APP_NAME }}:latest -f Dockerfile-nginxv1 .
+          docker push ${{ secrets.DOCKER_USER }}/${{ env.APP_NAME }}:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Connect in ssh to host
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Pull image from docker hub
+        run: |
+          docker pull ${{ secrets.DOCKER_USER }}/${{ env.APP_NAME }}:latest
+      - name: Run container
+        run: |
+          docker run -d -p 80:80 ${{ secrets.DOCKER_USER }}/${{ env.APP_NAME }}:latest
+
       
