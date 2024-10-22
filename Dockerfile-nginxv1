@@ -1,0 +1,26 @@
+FROM nginx
+# Install PHP FPM
+RUN apt update && apt install -y php8.2-fpm 
+
+
+# Copy everything from site
+COPY ./webapp /var/www/html/
+# Copy nginx conf
+COPY ./nginx/ /etc/
+# Start PHP-FPM service
+#RUN service php8.2-fpm start
+# Expose ports
+#&& nginx -g 'daemon off;'
+# CMD service php8.2-fpm start 
+# EXPOSE 443 Only if HTTPS Cert
+
+COPY ./startup.sh /
+
+# Make the script executable
+RUN chmod +x /startup.sh
+
+
+EXPOSE 80
+
+
+ENTRYPOINT ["/startup.sh"]

@@ -2,7 +2,7 @@
 	$base = 'site';
 	$pass = 'codetest';
 	$user = 'root';
-	$host = 'localhost';
+	$host = 'junia-5a_db';
 
 	//$base = 'qdeclercq';
 	//$pass = '90su39vi';
